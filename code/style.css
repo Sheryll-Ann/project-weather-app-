@@ -61,7 +61,6 @@ h2 {
     width: 100%;
     margin: 0;
     padding: 0;
-    margin-bottom: 20px;
 }
 
 .current-city-weather {
@@ -69,17 +68,43 @@ h2 {
     justify-content: left;
     align-items: left;
     width: 100%;
-    margin-bottom: 10px;
-    padding: 0;
-
 }
 
-.sunset-sunrise {
+.current-city-weather img {
+    margin-right: 10px;
+    line-height: 1;
+}
+
+.sun-state {
     display: flex;
-    justify-content: left;
-    align-items: left;
-    margin-bottom: 10px;
+    flex-direction: row;
+    justify-content: flex-start;
     padding: 0;
+}
+
+.weather {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    line-height: 1;
+    margin-top: 0;
+}
+
+.sun-state {
+    display: flex;
+    line-height: 1;
+    word-spacing: 0.9em;
+}
+
+.sun-state p {
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 30px;
+
 }
 
 .swipe-button {

@@ -1,6 +1,8 @@
 const currentCity = document.getElementById('current-city');
 const container = document.getElementById('weather');
 const cityInput = document.getElementById('city-input');
+const sunState = document.getElementById('sun-state');
+const currentCityWeather = document.getElementById('current-city-weather');
 const searchButton = document.getElementById('search-button');
 const swipeButton = document.getElementById('swipe-button');
 const forecastTable = document.getElementById('forecast-table')
@@ -12,11 +14,11 @@ const apiKey = '30497ceff63316bea65ec674ac0ba4c7';
 const cities = [
     {
         name: 'Stockholm',
-        image: 'https://images.unsplash.com/photo-1620408696006-d1315bf240f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2773&q=80'
+        image: 'https://images.unsplash.com/photo-1571824637968-964d9bd10d36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80'
     },
     {
         name: 'Rome',
-        image: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80'
+        image: 'https://images.unsplash.com/photo-1590273971191-2af8df641e2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1635&q=80'
     },
     {
         name: 'Bordeaux',
@@ -24,7 +26,7 @@ const cities = [
     },
     {
         name: 'Vienna',
-        image: 'https://images.unsplash.com/photo-1526581671404-349f224db79b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80'
+        image: 'https://images.unsplash.com/photo-1585425422110-bb85558b2293?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80'
     }
 ];
 
@@ -52,6 +54,8 @@ const formattedTime = (timestamp, timeshift) => {
 //Fetch current data for when entering the page
 getWeatherData = (city) => {
     currentCity.innerHTML = '';
+    currentCityWeather.innerHTML = '';
+    sunState.innerHTML = '';
     const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city.name}&units=metric&appid=${apiKey}`;
     heroImage.style.backgroundImage = `url(${city.image})`;
     fetch(currentWeatherUrl)
@@ -69,15 +73,16 @@ getWeatherData = (city) => {
             currentCity.innerHTML += `
             <p>${formattedTime(currentWeatherJson.dt, currentWeatherJson.timezone)}</p>
             `
-            currentCity.innerHTML += `
+            currentCityWeather.innerHTML += `
             <p> ${currentWeatherJson.weather[0].description}</p>
             `;
-            currentCity.innerHTML += `
+            currentCityWeather.innerHTML += `
             <img src="https://openweathermap.org/img/wn/${currentWeatherJson.weather[0].icon}@2x.png">
             `;
-            currentCity.innerHTML += `
-            <p> sunrise ${formattedTime(currentWeatherJson.sys.sunrise, currentWeatherJson.timezone)} / sunset ${formattedTime(currentWeatherJson.sys.sunset, currentWeatherJson.timezone)}
-            `;
+            sunState.innerHTML += `
+            <p> sunrise ${formattedTime(currentWeatherJson.sys.sunrise, currentWeatherJson.timezone)}</p>`;
+            sunState.innerHTML += `
+            <p> sunset ${formattedTime(currentWeatherJson.sys.sunset, currentWeatherJson.timezone)}</p > `;
 
         })
         .catch((error) => {
@@ -109,11 +114,11 @@ weeklyForecast = (city) => {
                 const dateTime = new Date(forecast.dt * 1000); // Convert timestamp from seconds to ms adapted to Javascript
                 const date = dateTime.toLocaleDateString(); // Formated date accordingly to the user's locale
                 const weekDay = dateTime.getDay(); //Formatted weekday
-                const time = dateTime.toLocaleTimeString(); // Catch the time of data point
+                /*const time = dateTime.toLocaleTimeString(); // Catch the time of data point */
 
                 // Display date, weather description, and temperature in Celsius
                 if (!processedDates.includes(date)) {//if date is not already included in the processedDates array, go to next line code
-                    if (time === '2:00:00 PM') {//forecast table displays only if time = 2p.m. i.e. middle of day
+                    if (dateTime.getHours() === 2 || dateTime.getHours() === 14) {//forecast table displays only if time = 2p.m. i.e. middle of day (2 different time formats for locale compatibility)
 
                         const row = document.createElement('tr');//create a table row
 
